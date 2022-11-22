@@ -1,0 +1,30 @@
+const client = require("../../index")
+const { QuickDB } = require('quick.db');
+
+client.on('guildMemberUpdate', member => {
+    db.table(`Guild_${member.guild.id}`, 'string[]')
+
+    setTimeout(() => {
+        let Id = db.get(`StatsTotal`)
+        if (Id === null) return;
+        client.channels.cache.get(Id).setName(`Total Members : ${member.guild.memberCount}`)
+    }, 30000);
+})
+client.on('guildMemberUpdate', member => {
+    db.table(`Guild_${member.guild.id}`, 'string[]')
+
+    setTimeout(() => {
+        let Id = db.get(`StatsUsers`)
+        if (Id === null) return;
+        client.channels.cache.get(Id).setName(`Users : ${member.guild.members.size - member.guild.members.cache.filter(member => member.user.bot).size}`)
+    }, 30000);
+})
+client.on('guildMemberUpdate', member => {
+    db.table(`Guild_${member.guild.id}`, 'string[]')
+
+    setTimeout(() => {
+        let Id = db.get(`StatsBots`)
+        if (Id === null) return;
+        client.channels.cache.get(Id).setName(`Bots : ${member.guild.members.cache.filter((m) => m.user.bot).size}`)
+    }, 30000);
+})

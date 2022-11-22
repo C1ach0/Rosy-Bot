@@ -1,0 +1,55 @@
+const { MessageEmbed, Message, MessageAttachment } = require('discord.js')
+const client = require("../../index");
+const { QuickDB } = require('quick.db');;
+
+
+client.on('guildMemberRemove', async member => {
+    db.table(`Guild_${member.guild.id}`, 'string[]')
+
+    // channel
+    let Byechx = db.get(`GoodbyeChannel`);
+    if(Byechx === null) return;
+    
+    const channel = member.guild.channels.cache.get(Byechx)
+    if(!channel) return
+
+    // contant for embed
+    const embedColor = db.get(`GoodbyeEmbedColor`)
+
+    const embedTitle = db.get(`GoodbyeEmbedTitle`)
+
+    const embedDescription = db.get(`GoodbyeEmbedDescription`)
+
+    const embedImg = db.get(`GoodbyeEmbedImg`)
+    
+    const embedFooter = db.get(`GoodbyeEmbedFooter`)
+
+    // Lang selection
+
+    const Lang = await db.get(`Language`)
+
+    if(Lang == "en" ||  null) {
+        let Goodbye = new MessageEmbed()
+        .setColor(embedColor || member.guild.me.displayHexColor)
+        .setTitle(embedTitle || ``)
+        .setAuthor(`Goodbye ${member.user.username}`)
+        .setDescription(embedDescription || ``)
+        .setImage(embedImg || client.config.defaultGoodbyeImage)
+        .setFooter(embedFooter || `MemberCount : ${member.guild.memberCount}`)
+        await member.guild.channels.cache.get(Byechx).send({embeds: [Goodbye]})
+    }
+
+    if(Lang == 'fr') {
+        let Goodbye = new MessageEmbed()
+        .setColor(embedColor || member.guild.me.displayHexColor)
+        .setTitle(embedTitle || ``)
+        .setAuthor(`Au revoir ${member.user.username}`)
+        .setDescription(embedDescription || ``)
+        .setImage(embedImg || client.config.defaultGoodbyeImage)
+        .setFooter(embedFooter || `Membres : ${member.guild.memberCount}`)
+        await member.guild.channels.cache.get(Byechx).send({embeds: [Goodbye]})
+    }
+
+
+
+})
