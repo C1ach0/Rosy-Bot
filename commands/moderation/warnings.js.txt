@@ -1,0 +1,37 @@
+const {
+    Message,
+    Client,
+    MessageEmbed,
+    Permissions
+} = require("discord.js");
+const { QuickDB } = require('quick.db');
+
+module.exports = {
+    name: "warnings",
+    aliases: ['warn-list'],
+    description: 'Show all warn of a member',
+    usage: '<@user>',
+    emoji: '⛓',
+    permissions: ['BAN_MEMBERS'],
+    /**
+     *
+     * @param {Client} client
+     * @param {Message} message
+     * @param {String[]} args
+     */
+    run: async (client, message, args) => {
+
+        if (!message.member.permissions.has(Permissions.FLAGS.BAN_MEMBERS)) return message.reply("You do not have the required permission to run this command!")
+
+        const target = message.mentions.users.first() || message.guild.members.cache.get(args[0]);
+
+        if (!target) return message.channel.send(`💥 **Please mention a user!**`)
+
+        let warnings = db.get(`warnings_${message.guild.id}_user_${target.id}`)
+
+        if (warnings === null) warnings = 0;
+
+        message.channel.send(`${target} have **${warnings}** warning(s)`)
+
+    },
+};
